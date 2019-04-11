@@ -1,0 +1,11 @@
+QT.lzma_private.VERSION = 0.9.9
+QT.lzma_private.name = QtLzma
+QT.lzma_private.module =
+QT.lzma_private.libs = $$QT_MODULE_LIB_BASE
+QT.lzma_private.includes = $$QT_MODULE_INCLUDE_BASE/QtLzma/1.0.0 $$QT_MODULE_INCLUDE_BASE/QtLzma/1.0.0/QtLzma
+QT.lzma_private.frameworks =
+QT.lzma_private.depends = core
+QT.lzma_private.uses =
+QT.lzma_private.module_config = v2 internal_module
+QT.lzma_private.enabled_features =
+QT.lzma_private.disabled_features =
