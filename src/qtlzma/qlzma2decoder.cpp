@@ -19,12 +19,12 @@ QLzma2Decoder::~QLzma2Decoder()
 {
 }
 
-bool QLzma2Decoder::decode(QIODevice *in, QIODevice *out, uchar prop)
+bool QLzma2Decoder::blockingDecode(QIODevice *in, QIODevice *out, uchar prop)
 {
-    return QLzma2Decoder::decode(in, out, prop, -1);
+    return QLzma2Decoder::blockingDecode(in, out, prop, -1);
 }
 
-bool QLzma2Decoder::decode(const QByteArray &in, QByteArray &out, uchar prop)
+bool QLzma2Decoder::blockingDecode(const QByteArray &in, QByteArray &out, uchar prop)
 {
     if (in.isEmpty()) {
         qWarning(lcLzma2Decoder, "empty input");
@@ -35,10 +35,10 @@ bool QLzma2Decoder::decode(const QByteArray &in, QByteArray &out, uchar prop)
         Q_UNUSED(clean);
     }
 
-    return QLzma2Decoder::decode(in, out, prop, -1);
+    return QLzma2Decoder::blockingDecode(in, out, prop, -1);
 }
 
-QByteArray QLzma2Decoder::decode(const QByteArray &in, uchar prop)
+QByteArray QLzma2Decoder::blockingDecode(const QByteArray &in, uchar prop)
 {
     if (in.isEmpty()) {
         qWarning(lcLzma2Decoder, "empty input");
@@ -47,10 +47,10 @@ QByteArray QLzma2Decoder::decode(const QByteArray &in, uchar prop)
 
     QByteArray out;
 
-    return QLzma2Decoder::decode(in, out, prop, -1) ? out : QByteArray();
+    return QLzma2Decoder::blockingDecode(in, out, prop, -1) ? out : QByteArray();
 }
 
-bool QLzma2Decoder::decode2(QByteArray &io, uchar prop)
+bool QLzma2Decoder::blockingDecode2(QByteArray &io, uchar prop)
 {
     if (io.isEmpty()) {
         qWarning(lcLzma2Decoder, "empty input");
@@ -59,7 +59,7 @@ bool QLzma2Decoder::decode2(QByteArray &io, uchar prop)
 
     QByteArray in = std::move(io);
 
-    if (!QLzma2Decoder::decode(in, io, prop, -1)) {
+    if (!QLzma2Decoder::blockingDecode(in, io, prop, -1)) {
         in.swap(io);
         return false;
     }
@@ -67,7 +67,7 @@ bool QLzma2Decoder::decode2(QByteArray &io, uchar prop)
     return true;
 }
 
-bool QLzma2Decoder::decode(QIODevice *in, QIODevice *out, uchar prop, qint64 uncompressedSize)
+bool QLzma2Decoder::blockingDecode(QIODevice *in, QIODevice *out, uchar prop, qint64 uncompressedSize)
 {
     if (!in) {
         qWarning(lcLzma2Decoder, "null input device");
@@ -100,7 +100,7 @@ bool QLzma2Decoder::decode(QIODevice *in, QIODevice *out, uchar prop, qint64 unc
     return handler.decode(in, out, uncompressedSize);
 }
 
-bool QLzma2Decoder::decode(const QByteArray &in, QByteArray &out, uchar prop, qint64 uncompressedSize)
+bool QLzma2Decoder::blockingDecode(const QByteArray &in, QByteArray &out, uchar prop, qint64 uncompressedSize)
 {
     QByteArray *in2 = const_cast<QByteArray *>(&in);
     QScopedPointer<QBuffer> ibuf(new QBuffer(in2));
@@ -115,21 +115,21 @@ bool QLzma2Decoder::decode(const QByteArray &in, QByteArray &out, uchar prop, qi
         return false;
     }
 
-    return QLzma2Decoder::decode(ibuf.data(), obuf.data(), prop, uncompressedSize);
+    return QLzma2Decoder::blockingDecode(ibuf.data(), obuf.data(), prop, uncompressedSize);
 }
 
-QByteArray QLzma2Decoder::decode(const QByteArray &in, uchar prop, qint64 uncompressedSize)
+QByteArray QLzma2Decoder::blockingDecode(const QByteArray &in, uchar prop, qint64 uncompressedSize)
 {
     QByteArray out;
 
-    return QLzma2Decoder::decode(in, out, prop, uncompressedSize) ? out : QByteArray();
+    return QLzma2Decoder::blockingDecode(in, out, prop, uncompressedSize) ? out : QByteArray();
 }
 
-bool QLzma2Decoder::decode2(QByteArray &io, uchar prop, qint64 uncompressedSize)
+bool QLzma2Decoder::blockingDecode2(QByteArray &io, uchar prop, qint64 uncompressedSize)
 {
     QByteArray in = std::move(io);
 
-    if (!QLzma2Decoder::decode(in, io, prop, uncompressedSize)) {
+    if (!QLzma2Decoder::blockingDecode(in, io, prop, uncompressedSize)) {
         in.swap(io);
         return false;
     }

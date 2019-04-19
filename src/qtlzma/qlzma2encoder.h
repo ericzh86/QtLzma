@@ -41,15 +41,15 @@ protected:
     QScopedPointer<QLzma2EncoderPrivate> d_ptr;
 
 public:
-    static bool encode(QIODevice *in, QIODevice *out, uchar &prop);
-    static bool encode(const QByteArray &in, QByteArray &out, uchar &prop);
-    static QByteArray encode(const QByteArray &in, uchar &prop);
-    static bool encode2(QByteArray &io, uchar &prop);
+    static bool blockingEncode(QIODevice *in, QIODevice *out, uchar &prop);
+    static bool blockingEncode(const QByteArray &in, QByteArray &out, uchar &prop);
+    static QByteArray blockingEncode(const QByteArray &in, uchar &prop);
+    static bool blockingEncode2(QByteArray &io, uchar &prop);
 public:
-    static bool encode(QIODevice *in, QIODevice *out, uchar &prop, const QLzma2EncoderOptions &options);
-    static bool encode(const QByteArray &in, QByteArray &out, uchar &prop, const QLzma2EncoderOptions &options);
-    static QByteArray encode(const QByteArray &in, uchar &prop, const QLzma2EncoderOptions &options);
-    static bool encode2(QByteArray &io, uchar &prop, const QLzma2EncoderOptions &options);
+    static bool blockingEncode(QIODevice *in, QIODevice *out, uchar &prop, const QLzma2EncoderOptions &options);
+    static bool blockingEncode(const QByteArray &in, QByteArray &out, uchar &prop, const QLzma2EncoderOptions &options);
+    static QByteArray blockingEncode(const QByteArray &in, uchar &prop, const QLzma2EncoderOptions &options);
+    static bool blockingEncode2(QByteArray &io, uchar &prop, const QLzma2EncoderOptions &options);
 };
 
 #endif // QLZMA2ENCODER_H

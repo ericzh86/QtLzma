@@ -18,15 +18,15 @@ protected:
     QScopedPointer<QLzma2DecoderPrivate> d_ptr;
 
 public:
-    static bool decode(QIODevice *in, QIODevice *out, uchar prop);
-    static bool decode(const QByteArray &in, QByteArray &out, uchar prop);
-    static QByteArray decode(const QByteArray &in, uchar prop);
-    static bool decode2(QByteArray &io, uchar prop);
+    static bool blockingDecode(QIODevice *in, QIODevice *out, uchar prop);
+    static bool blockingDecode(const QByteArray &in, QByteArray &out, uchar prop);
+    static QByteArray blockingDecode(const QByteArray &in, uchar prop);
+    static bool blockingDecode2(QByteArray &io, uchar prop);
 public:
-    static bool decode(QIODevice *in, QIODevice *out, uchar prop, qint64 uncompressedSize);
-    static bool decode(const QByteArray &in, QByteArray &out, uchar prop, qint64 uncompressedSize);
-    static QByteArray decode(const QByteArray &in, uchar prop, qint64 uncompressedSize);
-    static bool decode2(QByteArray &io, uchar prop, qint64 uncompressedSize);
+    static bool blockingDecode(QIODevice *in, QIODevice *out, uchar prop, qint64 uncompressedSize);
+    static bool blockingDecode(const QByteArray &in, QByteArray &out, uchar prop, qint64 uncompressedSize);
+    static QByteArray blockingDecode(const QByteArray &in, uchar prop, qint64 uncompressedSize);
+    static bool blockingDecode2(QByteArray &io, uchar prop, qint64 uncompressedSize);
 };
 
 #endif // QLZMA2DECODER_H

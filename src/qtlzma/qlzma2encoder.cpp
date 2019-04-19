@@ -69,14 +69,14 @@ QLzma2Encoder::~QLzma2Encoder()
 {
 }
 
-bool QLzma2Encoder::encode(QIODevice *in, QIODevice *out, uchar &prop)
+bool QLzma2Encoder::blockingEncode(QIODevice *in, QIODevice *out, uchar &prop)
 {
     QLzma2EncoderOptions options;
 
-    return QLzma2Encoder::encode(in, out, prop, options);
+    return QLzma2Encoder::blockingEncode(in, out, prop, options);
 }
 
-bool QLzma2Encoder::encode(const QByteArray &in, QByteArray &out, uchar &prop)
+bool QLzma2Encoder::blockingEncode(const QByteArray &in, QByteArray &out, uchar &prop)
 {
     if (in.isEmpty()) {
         qWarning(lcLzma2Encoder, "empty input");
@@ -102,10 +102,10 @@ bool QLzma2Encoder::encode(const QByteArray &in, QByteArray &out, uchar &prop)
 
     QLzma2EncoderOptions options;
 
-    return QLzma2Encoder::encode(ibuf.data(), obuf.data(), prop, options);
+    return QLzma2Encoder::blockingEncode(ibuf.data(), obuf.data(), prop, options);
 }
 
-QByteArray QLzma2Encoder::encode(const QByteArray &in, uchar &prop)
+QByteArray QLzma2Encoder::blockingEncode(const QByteArray &in, uchar &prop)
 {
     if (in.isEmpty()) {
         qWarning(lcLzma2Encoder, "empty input");
@@ -115,10 +115,10 @@ QByteArray QLzma2Encoder::encode(const QByteArray &in, uchar &prop)
     QByteArray out;
     QLzma2EncoderOptions options;
 
-    return QLzma2Encoder::encode(in, out, prop, options) ? out : QByteArray();
+    return QLzma2Encoder::blockingEncode(in, out, prop, options) ? out : QByteArray();
 }
 
-bool QLzma2Encoder::encode2(QByteArray &io, uchar &prop)
+bool QLzma2Encoder::blockingEncode2(QByteArray &io, uchar &prop)
 {
     if (io.isEmpty()) {
         qWarning(lcLzma2Encoder, "empty input");
@@ -128,7 +128,7 @@ bool QLzma2Encoder::encode2(QByteArray &io, uchar &prop)
     QLzma2EncoderOptions options;
     QByteArray in = std::move(io);
 
-    if (!QLzma2Encoder::encode(in, io, prop, options)) {
+    if (!QLzma2Encoder::blockingEncode(in, io, prop, options)) {
         in.swap(io);
         return false;
     }
@@ -136,7 +136,7 @@ bool QLzma2Encoder::encode2(QByteArray &io, uchar &prop)
     return true;
 }
 
-bool QLzma2Encoder::encode(QIODevice *in, QIODevice *out, uchar &prop, const QLzma2EncoderOptions &options)
+bool QLzma2Encoder::blockingEncode(QIODevice *in, QIODevice *out, uchar &prop, const QLzma2EncoderOptions &options)
 {
     if (!in) {
         qWarning(lcLzma2Encoder, "null input device");
@@ -169,7 +169,7 @@ bool QLzma2Encoder::encode(QIODevice *in, QIODevice *out, uchar &prop, const QLz
     return handler.encode(in, out);
 }
 
-bool QLzma2Encoder::encode(const QByteArray &in, QByteArray &out, uchar &prop, const QLzma2EncoderOptions &options)
+bool QLzma2Encoder::blockingEncode(const QByteArray &in, QByteArray &out, uchar &prop, const QLzma2EncoderOptions &options)
 {
     QByteArray *in2 = const_cast<QByteArray *>(&in);
     QScopedPointer<QBuffer> ibuf(new QBuffer(in2));
@@ -182,21 +182,21 @@ bool QLzma2Encoder::encode(const QByteArray &in, QByteArray &out, uchar &prop, c
         return false;
     }
 
-    return QLzma2Encoder::encode(ibuf.data(), obuf.data(), prop, options);
+    return QLzma2Encoder::blockingEncode(ibuf.data(), obuf.data(), prop, options);
 }
 
-QByteArray QLzma2Encoder::encode(const QByteArray &in, uchar &prop, const QLzma2EncoderOptions &options)
+QByteArray QLzma2Encoder::blockingEncode(const QByteArray &in, uchar &prop, const QLzma2EncoderOptions &options)
 {
     QByteArray out;
 
-    return QLzma2Encoder::encode(in, out, prop, options) ? out : QByteArray();
+    return QLzma2Encoder::blockingEncode(in, out, prop, options) ? out : QByteArray();
 }
 
-bool QLzma2Encoder::encode2(QByteArray &io, uchar &prop, const QLzma2EncoderOptions &options)
+bool QLzma2Encoder::blockingEncode2(QByteArray &io, uchar &prop, const QLzma2EncoderOptions &options)
 {
     QByteArray in = std::move(io);
 
-    if (!QLzma2Encoder::encode(in, io, prop, options)) {
+    if (!QLzma2Encoder::blockingEncode(in, io, prop, options)) {
         in.swap(io);
         return false;
     }
