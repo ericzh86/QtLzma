@@ -36,7 +36,7 @@ QSharedPointer<QFile> QtLzma2::openFile(const QString &filename)
 void QtLzma2::initTestCase()
 {
     license = readFile(":/testfiles/LICENSE");
-    QLzma2Encoder::encode(license, encodedLicense, encodeProp);
+    QLzma2Encoder::blockingEncode(license, encodedLicense, encodeProp);
     uncompressedSize = license.size();
 }
 
@@ -51,7 +51,7 @@ void QtLzma2::encodeWithInvalidParameters()
     do {
         uchar prop = 0;
 
-        QVERIFY(QLzma2Encoder::encode(nullptr, nullptr, prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode(nullptr, nullptr, prop) != true);
     } while (false);
 
     do {
@@ -60,7 +60,7 @@ void QtLzma2::encodeWithInvalidParameters()
 
         QScopedPointer<QBuffer> ibuf(new QBuffer(&i));
 
-        QVERIFY(QLzma2Encoder::encode(ibuf.data(), nullptr, prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode(ibuf.data(), nullptr, prop) != true);
     } while (false);
 
     do {
@@ -69,7 +69,7 @@ void QtLzma2::encodeWithInvalidParameters()
 
         QScopedPointer<QBuffer> obuf(new QBuffer(&o));
 
-        QVERIFY(QLzma2Encoder::encode(nullptr, obuf.data(), prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode(nullptr, obuf.data(), prop) != true);
     } while (false);
 
     do {
@@ -80,7 +80,7 @@ void QtLzma2::encodeWithInvalidParameters()
         QScopedPointer<QBuffer> ibuf(new QBuffer(&i));
         QScopedPointer<QBuffer> obuf(new QBuffer(&o));
 
-        QVERIFY(QLzma2Encoder::encode(ibuf.data(), obuf.data(), prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode(ibuf.data(), obuf.data(), prop) != true);
     } while (false);
 
     do {
@@ -93,7 +93,7 @@ void QtLzma2::encodeWithInvalidParameters()
 
         ibuf->open(QBuffer::ReadWrite);
 
-        QVERIFY(QLzma2Encoder::encode(ibuf.data(), obuf.data(), prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode(ibuf.data(), obuf.data(), prop) != true);
     } while (false);
 
     do {
@@ -106,7 +106,7 @@ void QtLzma2::encodeWithInvalidParameters()
 
         obuf->open(QBuffer::ReadWrite);
 
-        QVERIFY(QLzma2Encoder::encode(ibuf.data(), obuf.data(), prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode(ibuf.data(), obuf.data(), prop) != true);
     } while (false);
 
     do {
@@ -120,7 +120,7 @@ void QtLzma2::encodeWithInvalidParameters()
         ibuf->open(QBuffer::ReadWrite);
         obuf->open(QBuffer::ReadWrite);
 
-        QVERIFY(QLzma2Encoder::encode(ibuf.data(), obuf.data(), prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode(ibuf.data(), obuf.data(), prop) != true);
         QCOMPARE(o.size(), 0);
         QVERIFY(i == o);
     } while (false);
@@ -132,7 +132,7 @@ void QtLzma2::encodeWithInvalidParameters()
         QByteArray o;
         uchar prop = 0;
 
-        QVERIFY(QLzma2Encoder::encode(i, o, prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode(i, o, prop) != true);
     } while (false);
 
     do {
@@ -142,7 +142,7 @@ void QtLzma2::encodeWithInvalidParameters()
 
         i = o = license;
 
-        QVERIFY(QLzma2Encoder::encode(i, o, prop) == true);
+        QVERIFY(QLzma2Encoder::blockingEncode(i, o, prop) == true);
         QVERIFY(o.isEmpty() != true);
         QVERIFY(i != o);
     } while (false);
@@ -154,7 +154,7 @@ void QtLzma2::encodeWithInvalidParameters()
 
         i = license;
 
-        QVERIFY(QLzma2Encoder::encode(i, o, prop) == true);
+        QVERIFY(QLzma2Encoder::blockingEncode(i, o, prop) == true);
         QVERIFY(o.isEmpty() != true);
     } while (false);
 
@@ -164,7 +164,7 @@ void QtLzma2::encodeWithInvalidParameters()
         QByteArray i;
         uchar prop = 0;
 
-        QByteArray o = QLzma2Encoder::encode(i, prop);
+        QByteArray o = QLzma2Encoder::blockingEncode(i, prop);
         QCOMPARE(o.size(), 0);
         QVERIFY(i == o);
     } while (false);
@@ -175,7 +175,7 @@ void QtLzma2::encodeWithInvalidParameters()
 
         i = license;
 
-        QByteArray o = QLzma2Encoder::encode(i, prop);
+        QByteArray o = QLzma2Encoder::blockingEncode(i, prop);
         QVERIFY(o.isEmpty() != true);
         QVERIFY(i != o);
     } while (false);
@@ -186,7 +186,7 @@ void QtLzma2::encodeWithInvalidParameters()
         QByteArray i;
         uchar prop = 0;
 
-        QVERIFY(QLzma2Encoder::encode2(i, prop) != true);
+        QVERIFY(QLzma2Encoder::blockingEncode2(i, prop) != true);
         QVERIFY(i.isEmpty() == true);
     } while (false);
 
@@ -197,7 +197,7 @@ void QtLzma2::encodeWithInvalidParameters()
 
         i = o = license;
 
-        QVERIFY(QLzma2Encoder::encode2(o, prop) == true);
+        QVERIFY(QLzma2Encoder::blockingEncode2(o, prop) == true);
         QVERIFY(o.isEmpty() != true);
         QVERIFY(i != o);
     } while (false);
@@ -208,7 +208,7 @@ void QtLzma2::decodeWithInvalidParameters()
     // static bool decode(QIODevice *in, QIODevice *out, uchar prop);
 
     do {
-        QVERIFY(QLzma2Decoder::decode(nullptr, nullptr, encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(nullptr, nullptr, encodeProp) != true);
     } while (false);
 
     do {
@@ -216,7 +216,7 @@ void QtLzma2::decodeWithInvalidParameters()
 
         QScopedPointer<QBuffer> ibuf(new QBuffer(&i));
 
-        QVERIFY(QLzma2Decoder::decode(ibuf.data(), nullptr, encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(ibuf.data(), nullptr, encodeProp) != true);
         QCOMPARE(i.size(), 0);
     } while (false);
 
@@ -225,7 +225,7 @@ void QtLzma2::decodeWithInvalidParameters()
 
         QScopedPointer<QBuffer> obuf(new QBuffer(&o));
 
-        QVERIFY(QLzma2Decoder::decode(nullptr, obuf.data(), encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(nullptr, obuf.data(), encodeProp) != true);
         QCOMPARE(o.size(), 0);
     } while (false);
 
@@ -236,7 +236,7 @@ void QtLzma2::decodeWithInvalidParameters()
         QScopedPointer<QBuffer> ibuf(new QBuffer(&i));
         QScopedPointer<QBuffer> obuf(new QBuffer(&o));
 
-        QVERIFY(QLzma2Decoder::decode(ibuf.data(), obuf.data(), encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(ibuf.data(), obuf.data(), encodeProp) != true);
         QCOMPARE(i.size(), 0);
         QCOMPARE(o.size(), 0);
     } while (false);
@@ -250,7 +250,7 @@ void QtLzma2::decodeWithInvalidParameters()
 
         ibuf->open(QBuffer::ReadWrite);
 
-        QVERIFY(QLzma2Decoder::decode(ibuf.data(), obuf.data(), encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(ibuf.data(), obuf.data(), encodeProp) != true);
         QCOMPARE(i.size(), 0);
         QCOMPARE(o.size(), 0);
     } while (false);
@@ -264,7 +264,7 @@ void QtLzma2::decodeWithInvalidParameters()
 
         obuf->open(QBuffer::ReadWrite);
 
-        QVERIFY(QLzma2Decoder::decode(ibuf.data(), obuf.data(), encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(ibuf.data(), obuf.data(), encodeProp) != true);
         QCOMPARE(i.size(), 0);
         QCOMPARE(o.size(), 0);
     } while (false);
@@ -279,7 +279,7 @@ void QtLzma2::decodeWithInvalidParameters()
         ibuf->open(QBuffer::ReadWrite);
         obuf->open(QBuffer::ReadWrite);
 
-        QVERIFY(QLzma2Decoder::decode(ibuf.data(), obuf.data(), encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(ibuf.data(), obuf.data(), encodeProp) != true);
         QCOMPARE(i.size(), 0);
         QCOMPARE(o.size(), 0);
     } while (false);
@@ -288,60 +288,60 @@ void QtLzma2::decodeWithInvalidParameters()
 
     do {
         QByteArray o;
-        QVERIFY(QLzma2Decoder::decode(QByteArray(), o, encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(QByteArray(), o, encodeProp) != true);
         QCOMPARE(o.size(), 0);
     } while (false);
 
     do {
         QByteArray o;
-        QVERIFY(QLzma2Decoder::decode(license, o, encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(license, o, encodeProp) != true);
         QCOMPARE(o.size(), 0);
     } while (false);
 
     do {
         QByteArray o = encodedLicense;
-        QVERIFY(QLzma2Decoder::decode(license, o, encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(license, o, encodeProp) != true);
         QCOMPARE(o.size(), 0);
     } while (false);
 
     do {
         QByteArray o;
-        QVERIFY(QLzma2Decoder::decode(encodedLicense, o, encodeProp) == true);
+        QVERIFY(QLzma2Decoder::blockingDecode(encodedLicense, o, encodeProp) == true);
         QVERIFY(o == license);
     } while (false);
 
     do {
         QByteArray o = encodedLicense;
-        QVERIFY(QLzma2Decoder::decode(encodedLicense, o, encodeProp) == true);
+        QVERIFY(QLzma2Decoder::blockingDecode(encodedLicense, o, encodeProp) == true);
         QVERIFY(o == license);
     } while (false);
 
     do {
         QByteArray o;
 
-        QVERIFY(QLzma2Decoder::decode(encodedLicense, o, 64) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode(encodedLicense, o, 64) != true);
         QCOMPARE(o.size(), 0);
     } while (false);
 
     // static QByteArray decode(const QByteArray &in, uchar prop);
 
     do {
-        QByteArray o = QLzma2Decoder::decode(QByteArray(), encodeProp);
+        QByteArray o = QLzma2Decoder::blockingDecode(QByteArray(), encodeProp);
         QCOMPARE(o.size(), 0);
     } while (false);
 
     do {
-        QByteArray o = QLzma2Decoder::decode(license, encodeProp);
+        QByteArray o = QLzma2Decoder::blockingDecode(license, encodeProp);
         QCOMPARE(o.size(), 0);
     } while (false);
 
     do {
-        QByteArray o = QLzma2Decoder::decode(encodedLicense, encodeProp);
+        QByteArray o = QLzma2Decoder::blockingDecode(encodedLicense, encodeProp);
         QVERIFY(o == license);
     } while (false);
 
     do {
-        QByteArray o = QLzma2Decoder::decode(encodedLicense, 64);
+        QByteArray o = QLzma2Decoder::blockingDecode(encodedLicense, 64);
         QCOMPARE(o.size(), 0);
     } while (false);
 
@@ -350,25 +350,25 @@ void QtLzma2::decodeWithInvalidParameters()
     do {
         QByteArray i;
 
-        QVERIFY(QLzma2Decoder::decode2(i, encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode2(i, encodeProp) != true);
         QCOMPARE(i.size(), 0);
     } while (false);
 
     do {
         QByteArray i = license;
-        QVERIFY(QLzma2Decoder::decode2(i, encodeProp) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode2(i, encodeProp) != true);
         QVERIFY(i == license);
     } while (false);
 
     do {
         QByteArray i = encodedLicense;
-        QVERIFY(QLzma2Decoder::decode2(i, encodeProp) == true);
+        QVERIFY(QLzma2Decoder::blockingDecode2(i, encodeProp) == true);
         QVERIFY(i == license);
     } while (false);
 
     do {
         QByteArray i = encodedLicense;
-        QVERIFY(QLzma2Decoder::decode2(i, 64) != true);
+        QVERIFY(QLzma2Decoder::blockingDecode2(i, 64) != true);
         QVERIFY(i == encodedLicense);
     } while (false);
 }
